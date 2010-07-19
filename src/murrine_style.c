@@ -515,7 +515,9 @@ murrine_style_draw_shadow (DRAW_ARGS)
 	}
 	else if (DETAIL ("scrolled_window") || DETAIL ("viewport") || detail == NULL)
 	{
-		cairo_rectangle (cr, x+0.5, y+0.5, width-1, height-1);
+		murrine_rounded_rectangle (cr, x+0.5, y+0.5, width-1, height-1,
+		                           5,
+		                           MRN_CORNER_ALL);
 		murrine_set_color_rgb (cr, &colors->shade[5]);
 		cairo_stroke (cr);
 	}
