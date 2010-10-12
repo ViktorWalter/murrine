@@ -46,33 +46,16 @@ murrine_gtk_treeview_get_header_index (GtkTreeView *tv, GtkWidget *header,
 	do
 	{
 		GtkTreeViewColumn *column = GTK_TREE_VIEW_COLUMN(list->data);
-		if ( column->button == header )
+		if ( gtk_tree_view_column_get_widget (column) == header )
 		{
 			*column_index = *columns;
-			*resizable = column->resizable;
+			*resizable = gtk_tree_view_column_get_resizable (column);
 		}
-		if ( column->visible )
+		if ( gtk_tree_view_column_get_visible (column) )
 			(*columns)++;
 	} while ((list = g_list_next(list)));
 
 	g_list_free (list_start);
-}
-
-void
-murrine_gtk_clist_get_header_index (GtkCList *clist, GtkWidget *button,
-                                    gint *column_index, gint *columns)
-{
-	int i;
-	*columns = clist->columns;
-
-	for (i=0; i<*columns; i++)
-	{
-		if (clist->column[i].button == button)
-		{
-			*column_index = i;
-			break;
-		}
-	}
 }
 
 static GtkRequisition default_option_indicator_size = { 7, 13 };
@@ -105,46 +88,6 @@ murrine_option_menu_get_props (GtkWidget      *widget,
 	}
 	else
 		*indicator_spacing = default_option_indicator_spacing;
-}
-
-GtkWidget* 
-murrine_special_get_ancestor (GtkWidget *widget, GType widget_type)
-{
-	g_return_val_if_fail(GTK_IS_WIDGET(widget), NULL);
-
-	while (widget && widget->parent
-	       && !g_type_is_a(GTK_WIDGET_TYPE(widget->parent),
-	       widget_type))
-		widget = widget->parent;
-
-	if (!
-	    (widget && widget->parent
-	     && g_type_is_a(GTK_WIDGET_TYPE(widget->parent), widget_type)))
-		return NULL;
-
-	return widget;
-}
-
-GtkWidget*
-murrine_get_parent_window (GtkWidget *widget)
-{
-	GtkWidget *parent = widget->parent;
-
-	while (parent && GTK_WIDGET_NO_WINDOW (parent))
-		parent = parent->parent;
-
-	return parent;
-}
-
-GdkColor*
-murrine_get_parent_bgcolor (GtkWidget *widget)
-{
-	GtkWidget *parent = murrine_get_parent_window (widget);
-
-	if (parent && parent->style)
-		return &parent->style->bg[GTK_STATE_NORMAL];
-
-	return NULL;
 }
 
 gboolean
@@ -190,7 +133,7 @@ murrine_find_combo_box_widget (GtkWidget *widget)
 		if (GTK_IS_COMBO_BOX (widget))
 			result = widget;
 		else
-			result = murrine_find_combo_box_widget(widget->parent);
+			result = murrine_find_combo_box_widget(gtk_widget_get_parent(widget));
 	}
 
 	return result;
@@ -202,100 +145,19 @@ murrine_is_combo_box (GtkWidget *widget)
 	return (murrine_find_combo_box_widget(widget) != NULL);
 }
 
-MurrineStepper
-murrine_scrollbar_get_stepper (GtkWidget    *widget,
-                               GdkRectangle *stepper)
-{
-	MurrineStepper value = MRN_STEPPER_UNKNOWN;
-	GdkRectangle tmp;
-	GdkRectangle check_rectangle;
-	GtkOrientation orientation;
-
-	g_return_val_if_fail (GTK_IS_RANGE (widget), MRN_STEPPER_UNKNOWN);
-
-	check_rectangle.x      = widget->allocation.x;
-	check_rectangle.y      = widget->allocation.y;
-	check_rectangle.width  = stepper->width;
-	check_rectangle.height = stepper->height;
-
-	orientation = GTK_RANGE (widget)->orientation;
-
-	if (widget->allocation.x == -1 && widget->allocation.y == -1)
-		return MRN_STEPPER_UNKNOWN;
-
-	if (gdk_rectangle_intersect (stepper, &check_rectangle, &tmp))
-		value = MRN_STEPPER_A;
-
-	if (value == MRN_STEPPER_UNKNOWN) /* Haven't found a match */
-	{
-		if (orientation == GTK_ORIENTATION_HORIZONTAL)
-			check_rectangle.x = widget->allocation.x + stepper->width;
-		else
-			check_rectangle.y = widget->allocation.y + stepper->height;
-
-		if (gdk_rectangle_intersect (stepper, &check_rectangle, &tmp))
-			value = MRN_STEPPER_B;
-	}
-
-	if (value == MRN_STEPPER_UNKNOWN) /* Still haven't found a match */
-	{
-		if (orientation == GTK_ORIENTATION_HORIZONTAL)
-			check_rectangle.x = widget->allocation.x + widget->allocation.width - (stepper->width * 2);
-		else
-			check_rectangle.y = widget->allocation.y + widget->allocation.height - (stepper->height * 2);
-
-		if (gdk_rectangle_intersect (stepper, &check_rectangle, &tmp))
-			value = MRN_STEPPER_C;
-	}
-
-	if (value == MRN_STEPPER_UNKNOWN) /* STILL haven't found a match */
-	{
-		if (orientation == GTK_ORIENTATION_HORIZONTAL)
-			check_rectangle.x = widget->allocation.x + widget->allocation.width - stepper->width;
-		else
-			check_rectangle.y = widget->allocation.y + widget->allocation.height - stepper->height;
-
-		if (gdk_rectangle_intersect (stepper, &check_rectangle, &tmp))
-			value = MRN_STEPPER_D;
-	}
-
-	return value;
-}
-
-MurrineStepper
-murrine_scrollbar_visible_steppers (GtkWidget *widget)
-{
-	MurrineStepper steppers = 0;
-
-	g_return_val_if_fail (GTK_IS_RANGE (widget), MRN_STEPPER_UNKNOWN);
-
-	if (GTK_RANGE (widget)->has_stepper_a)
-		steppers |= MRN_STEPPER_A;
-
-	if (GTK_RANGE (widget)->has_stepper_b)
-		steppers |= MRN_STEPPER_B;
-
-	if (GTK_RANGE (widget)->has_stepper_c)
-		steppers |= MRN_STEPPER_C;
-
-	if (GTK_RANGE (widget)->has_stepper_d)
-		steppers |= MRN_STEPPER_D;
-
-	return steppers;
-}
-
 MurrineJunction
 murrine_scrollbar_get_junction (GtkWidget *widget)
 {
 	GtkAdjustment *adj;
 	MurrineJunction junction = MRN_JUNCTION_NONE;
 
-	g_return_val_if_fail (GTK_IS_RANGE (widget), MRN_JUNCTION_NONE);
+	if (!GTK_IS_RANGE (widget))
+		return MRN_JUNCTION_NONE;
 
-	adj = GTK_RANGE (widget)->adjustment;
+	adj = gtk_range_get_adjustment(GTK_RANGE (widget));
 
-	if (adj->value <= adj->lower &&
-	    (GTK_RANGE (widget)->has_stepper_a || GTK_RANGE (widget)->has_stepper_b))
+	if (gtk_adjustment_get_value(adj) <= gtk_adjustment_get_lower(adj) /*&&
+	    (GTK_RANGE (widget)->has_stepper_a || GTK_RANGE (widget)->has_stepper_b)*/)
 	{
 		if (!gtk_range_get_inverted (GTK_RANGE (widget)))
 			junction |= MRN_JUNCTION_BEGIN;
@@ -303,8 +165,8 @@ murrine_scrollbar_get_junction (GtkWidget *widget)
 			junction |= MRN_JUNCTION_END;
 	}
 
-	if (adj->value >= adj->upper - adj->page_size &&
-	    (GTK_RANGE (widget)->has_stepper_c || GTK_RANGE (widget)->has_stepper_d))
+	if (gtk_adjustment_get_value(adj) >= gtk_adjustment_get_upper(adj) - gtk_adjustment_get_page_size(adj) /*&&
+	    (GTK_RANGE (widget)->has_stepper_c || GTK_RANGE (widget)->has_stepper_d)*/)
 	{
 		if (!gtk_range_get_inverted (GTK_RANGE (widget)))
 			junction |= MRN_JUNCTION_END;
@@ -324,16 +186,17 @@ gboolean murrine_is_panel_widget (GtkWidget *widget)
 void
 murrine_set_toolbar_parameters (ToolbarParameters *toolbar,
                                 GtkWidget *widget,
-                                GdkWindow *window,
                                 gint x, gint y)
 {
+	GtkAllocation allocation;
+
+	gtk_widget_get_allocation (widget, &allocation);
 	toolbar->topmost = FALSE;
 
-	if (x == 0 && y == 0)
-	{
-		if (widget && widget->allocation.x == 0 && widget->allocation.y == 0)
+	if (x == 0 && y == 0) {
+		if (widget && allocation.x == 0 && allocation.y == 0)
 		{
-			if (widget->window == window && MRN_IS_TOOLBAR (widget))
+			if (MRN_IS_TOOLBAR (widget))
 			{
 				toolbar->topmost = TRUE;
 			}

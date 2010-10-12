@@ -18,7 +18,7 @@
  *
  */
 
-#include <gtk/gtkrc.h>
+#include <gtk/gtk.h>
 
 #ifndef MURRINE_RC_STYLE_H
 #define MURRINE_RC_STYLE_H
@@ -153,6 +153,7 @@ struct _MurrineRcStyleClass
 	GtkRcStyleClass parent_class;
 };
 
-GType murrine_rc_style_get_type	(void);
+G_GNUC_INTERNAL void  murrine_rc_style_register_types (GTypeModule *module);
+G_GNUC_INTERNAL GType murrine_rc_style_get_type       (void);
 
 #endif /* MURRINE_RC_STYLE_H */

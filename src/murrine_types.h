@@ -34,14 +34,6 @@ typedef enum
 
 typedef enum
 {
-	MRN_STATE_NORMAL,
-	MRN_STATE_ACTIVE,
-	MRN_STATE_SELECTED,
-	MRN_STATE_INSENSITIVE
-} MurrineStateType;
-
-typedef enum
-{
 	MRN_CORNER_NONE        = 0,
 	MRN_CORNER_TOPLEFT     = 1,
 	MRN_CORNER_TOPRIGHT    = 2,
@@ -66,11 +58,11 @@ typedef enum
 
 typedef enum
 {
-	MRN_STEPPER_UNKNOWN    = 0,
-	MRN_STEPPER_A          = 1,
-	MRN_STEPPER_B          = 2,
-	MRN_STEPPER_C          = 4,
-	MRN_STEPPER_D          = 8
+	MRN_STEPPER_UNKNOWN     = 0,
+	MRN_STEPPER_START       = 1,
+	MRN_STEPPER_START_INNER = 2,
+	MRN_STEPPER_END         = 4,
+	MRN_STEPPER_END_INNER   = 8
 } MurrineStepper;
 
 typedef enum
@@ -370,7 +362,7 @@ typedef struct
 	boolean ltr;
 	boolean focus;
 	boolean is_default;
-	MurrineStateType state_type;
+	GtkStateType state_type;
 	uint8 corners;
 	uint8 xthickness;
 	uint8 ythickness;

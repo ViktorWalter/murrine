@@ -36,6 +36,8 @@ G_GNUC_INTERNAL void murrine_gdk_color_to_rgb (GdkColor *c,
 G_GNUC_INTERNAL void murrine_get_parent_bg (const GtkWidget *widget,
                                             MurrineRGB *color);
 
+G_GNUC_INTERNAL void murrine_transform_for_layout (cairo_t *cr, PangoLayout *layout, int x, int y);
+
 G_GNUC_INTERNAL void murrine_set_color_rgb (cairo_t *cr,
                                             const MurrineRGB *color);
 

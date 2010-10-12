@@ -39,15 +39,15 @@ AC_ARG_ENABLE(rgba,
               [rgba=$enableval],
               [rgba="yes"], )
 
-PKG_CHECK_MODULES(GTK, gtk+-2.0 >= 2.18.0,,
-                  AC_MSG_ERROR([GTK+-2.18 is required to compile murrine]))
+PKG_CHECK_MODULES(GTK, gtk+-3.0 >= 2.91.0,,
+                  AC_MSG_ERROR([GTK+-3.0 is required to compile murrine]))
 
 PKG_CHECK_MODULES(pixman,[pixman-1],,AC_MSG_ERROR([Pixman is required to compile murrine]))
 
 AC_SUBST(GTK_CFLAGS)
 AC_SUBST(GTK_LIBS)
 
-GTK_VERSION=`$PKG_CONFIG --variable=gtk_binary_version gtk+-2.0`
+GTK_VERSION=`$PKG_CONFIG --variable=gtk_binary_version gtk+-3.0`
 AC_SUBST(GTK_VERSION)
 
 AC_SUBST(BUILD_ENGINES)

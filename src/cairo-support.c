@@ -266,14 +266,15 @@ void
 murrine_get_parent_bg (const GtkWidget *widget, MurrineRGB *color)
 {
 	GtkStateType state_type;
+	GtkStyle *style;
 	const GtkWidget *parent;
-	GdkColor *gcolor;
+	GdkColor gcolor;
 	gboolean stop;
 
 	if (widget == NULL)
 		return;
 
-	parent = widget->parent;
+	parent = gtk_widget_get_parent(GTK_WIDGET(widget));
 	stop = FALSE;
 
 	while (parent && !stop)
@@ -294,7 +295,7 @@ murrine_get_parent_bg (const GtkWidget *widget, MurrineRGB *color)
 		}
 
 		if (!stop)
-			parent = parent->parent;
+			parent = gtk_widget_get_parent(GTK_WIDGET(parent));
 	}
 
 	if (parent == NULL)
@@ -302,9 +303,42 @@ murrine_get_parent_bg (const GtkWidget *widget, MurrineRGB *color)
 
 	state_type = GTK_WIDGET_STATE (parent);
 
-	gcolor = &parent->style->bg[state_type];
+	style = gtk_widget_get_style(GTK_WIDGET(&parent));
+	gcolor = style->bg[state_type];
 
-	murrine_gdk_color_to_rgb (gcolor, &color->r, &color->g, &color->b);
+	murrine_gdk_color_to_rgb (&gcolor, &color->r, &color->g, &color->b);
+}
+
+void
+murrine_transform_for_layout (cairo_t *cr,
+                              PangoLayout *layout,
+                              int x,
+                              int y)
+{
+        const PangoMatrix *matrix;
+
+        matrix = pango_context_get_matrix (pango_layout_get_context (layout));
+        if (matrix)
+        {
+                cairo_matrix_t cairo_matrix;
+                PangoRectangle rect;
+
+                cairo_matrix_init (&cairo_matrix,
+                                   matrix->xx, matrix->yx,
+                                   matrix->xy, matrix->yy,
+                                   matrix->x0, matrix->y0);
+
+                pango_layout_get_extents (layout, NULL, &rect);
+                pango_matrix_transform_rectangle (matrix, &rect);
+                pango_extents_to_pixels (&rect, NULL);
+
+                cairo_matrix.x0 += x - rect.x;
+                cairo_matrix.y0 += y - rect.y;
+
+                cairo_set_matrix (cr, &cairo_matrix);
+        }
+        else
+                cairo_translate (cr, x, y);
 }
 
 void

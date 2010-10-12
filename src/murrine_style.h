@@ -18,7 +18,7 @@
  *
  */
 
-#include <gtk/gtkstyle.h>
+#include <gtk/gtk.h>
 
 #ifndef MURRINE_STYLE_H
 #define MURRINE_STYLE_H
@@ -101,6 +101,7 @@ struct _MurrineStyleClass
 	MurrineStyleFunctions style_functions[MRN_NUM_DRAW_STYLES];
 };
 
-GType murrine_style_get_type (void);
+G_GNUC_INTERNAL void  murrine_style_register_types (GTypeModule *module);
+G_GNUC_INTERNAL GType murrine_style_get_type       (void);
 
 #endif /* MURRINE_STYLE_H */

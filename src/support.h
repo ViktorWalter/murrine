@@ -129,10 +129,6 @@ G_GNUC_INTERNAL void murrine_gtk_treeview_get_header_index (GtkTreeView *tv,
                                                             gint        *column_index,
                                                             gint        *columns,
                                                             gboolean    *resizable);
-G_GNUC_INTERNAL void murrine_gtk_clist_get_header_index (GtkCList  *clist,
-                                                         GtkWidget *button,
-                                                         gint      *column_index,
-                                                         gint      *columns);
 G_GNUC_INTERNAL void murrine_option_menu_get_props (GtkWidget      *widget,
                                                     GtkRequisition *indicator_size,
                                                     GtkBorder      *indicator_spacing);
@@ -142,7 +138,6 @@ G_GNUC_INTERNAL MurrineJunction murrine_scrollbar_get_junction (GtkWidget *widge
 G_GNUC_INTERNAL gboolean murrine_is_panel_widget (GtkWidget *widget);
 G_GNUC_INTERNAL void murrine_set_toolbar_parameters (ToolbarParameters *toolbar,
                                                      GtkWidget *widget,
-                                                     GdkWindow *window,
                                                      gint x, gint y);
 G_GNUC_INTERNAL void murrine_get_notebook_tab_position (GtkWidget *widget,
                                                         gboolean  *start,
