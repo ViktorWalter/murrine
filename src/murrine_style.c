@@ -100,7 +100,7 @@ murrine_set_widget_parameters (const GtkWidget  *widget,
 	params->corners    = MRN_CORNER_ALL;
 	params->ltr        = murrine_widget_is_ltr ((GtkWidget*)widget);
 	params->focus      = (MURRINE_STYLE (style)->focusstyle != 0) && widget && gtk_widget_has_focus ((GtkWidget *) widget);
-	params->is_default = widget && GTK_WIDGET_HAS_DEFAULT ((GtkWidget *) widget);
+	params->is_default = widget && gtk_widget_has_default ((GtkWidget *) widget);
 
 	params->xthickness = style->xthickness;
 	params->ythickness = style->ythickness;
@@ -2131,7 +2131,7 @@ murrine_style_draw_focus (GtkStyle *style, cairo_t *cr, GtkStateType state_type,
 
 			if (relief == GTK_RELIEF_NORMAL)
 			{
-				if (widget && GTK_WIDGET_HAS_DEFAULT (widget))
+				if (widget && gtk_widget_has_default (widget))
 					focus.type = MRN_FOCUS_BUTTON_DEFAULT;
 				else
 					focus.type = MRN_FOCUS_BUTTON;

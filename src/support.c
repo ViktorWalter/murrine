@@ -245,7 +245,7 @@ murrine_get_notebook_tab_position (GtkWidget *widget,
 
 			/* Skip invisible tabs */
 			tab_label = gtk_notebook_get_tab_label (notebook, tab_child);
-			if (!tab_label || !GTK_WIDGET_VISIBLE (tab_label))
+			if (!tab_label || !gtk_widget_get_visible (tab_label))
 				continue;
 			/* This is the same what the notebook does internally. */
 			if (tab_label && !gtk_widget_get_child_visible (tab_label))
@@ -257,29 +257,23 @@ murrine_get_notebook_tab_position (GtkWidget *widget,
 				return;
 			}
 
-			gtk_notebook_query_tab_label_packing (notebook, tab_child,
-			                                      &expand,
-			                                      NULL, /* don't need fill */
-			                                      &pack_type);
+                        gtk_container_child_get (GTK_CONTAINER (notebook), tab_child,
+                                                 "tab-expand", &expand,
+                                                 "tab-pack", &pack_type,
+                                                 NULL);
 
-			if (!found_tabs)
-			{
+			if (!found_tabs) {
 				found_tabs = TRUE;
 				*start = FALSE;
 				*end = FALSE;
 			}
 
-			if (expand)
-			{
+			if (expand) {
 				*start = TRUE;
 				*end = TRUE;
-			}
-			else if (pack_type == GTK_PACK_START)
-			{
+			} else if (pack_type == GTK_PACK_START) {
 				*start = TRUE;
-			}
-			else
-			{
+			} else {
 				*end = TRUE;
 			}
 		}
