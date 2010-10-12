@@ -266,22 +266,22 @@ void
 murrine_get_parent_bg (const GtkWidget *widget, MurrineRGB *color)
 {
 	GtkStateType state_type;
-	GtkStyle *style;
 	const GtkWidget *parent;
-	GdkColor gcolor;
+	GdkColor *gcolor;
 	gboolean stop;
+	GtkStyle *style;
 
 	if (widget == NULL)
 		return;
 
-	parent = gtk_widget_get_parent(GTK_WIDGET(widget));
+	parent = gtk_widget_get_parent ((GtkWidget *) widget);
 	stop = FALSE;
 
 	while (parent && !stop)
 	{
 		stop = FALSE;
 
-		stop |= !GTK_WIDGET_NO_WINDOW (parent);
+		stop |= !gtk_widget_get_has_window ((GtkWidget *) parent);
 		stop |= GTK_IS_NOTEBOOK (parent) &&
 		        gtk_notebook_get_show_tabs (GTK_NOTEBOOK (parent)) &&
 		        gtk_notebook_get_show_border (GTK_NOTEBOOK (parent));
@@ -295,18 +295,18 @@ murrine_get_parent_bg (const GtkWidget *widget, MurrineRGB *color)
 		}
 
 		if (!stop)
-			parent = gtk_widget_get_parent(GTK_WIDGET(parent));
+			parent = gtk_widget_get_parent ((GtkWidget *) parent);
 	}
 
 	if (parent == NULL)
 		return;
 
-	state_type = GTK_WIDGET_STATE (parent);
+	state_type = gtk_widget_get_state ((GtkWidget *) parent);
 
-	style = gtk_widget_get_style(GTK_WIDGET(&parent));
-	gcolor = style->bg[state_type];
+	style = gtk_widget_get_style ((GtkWidget *) parent);
+	gcolor = &style->bg[state_type];
 
-	murrine_gdk_color_to_rgb (&gcolor, &color->r, &color->g, &color->b);
+	murrine_gdk_color_to_rgb (gcolor, &color->r, &color->g, &color->b);
 }
 
 void
