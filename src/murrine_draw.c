@@ -865,21 +865,24 @@ murrine_draw_progressbar_fill (cairo_t *cr,
 	/* progressbar->orientation < 2 == boolean is_horizontal */
 	if (progressbar->orientation < 2)
 	{
-		if (progressbar->orientation == MRN_ORIENTATION_LEFT_TO_RIGHT)
-			rotate_mirror_translate (cr, 0, x, y, FALSE, FALSE);
-		else
-			rotate_mirror_translate (cr, 0, x+width, y, TRUE, FALSE);
+		cairo_translate (cr, x, y);
+/*		if (progressbar->orientation == MRN_ORIENTATION_LEFT_TO_RIGHT)*/
+/*			rotate_mirror_translate (cr, 0, x, y, FALSE, FALSE);*/
+/*		else*/
+/*			rotate_mirror_translate (cr, 0, x+width, y, TRUE, FALSE);*/
 	}
 	else
 	{
-		int tmp = height; height = width; width = tmp;
+/*		int tmp = height; height = width; width = tmp;*/
 
-		x = x+1; y = y-1; width = width+2; height = height-2;
+		x = x+1; y = y-1; width = width-2; height = height+2;
 
-		if (progressbar->orientation == MRN_ORIENTATION_TOP_TO_BOTTOM)
-			rotate_mirror_translate (cr, M_PI/2, x, y, FALSE, FALSE);
-		else
-			rotate_mirror_translate (cr, M_PI/2, x, y+width, TRUE, FALSE);
+		murrine_exchange_axis (cr, &x, &y, &width, &height);
+
+/*		if (progressbar->orientation == MRN_ORIENTATION_TOP_TO_BOTTOM)*/
+/*			rotate_mirror_translate (cr, M_PI/2, x, y, FALSE, FALSE);*/
+/*		else*/
+/*			rotate_mirror_translate (cr, M_PI/2, x, y+width, TRUE, FALSE);*/
 	}
 
 	roundness = MIN (widget->roundness-widget->xthickness, height/2.0);
@@ -1901,10 +1904,11 @@ murrine_draw_scrollbar_trough (cairo_t *cr,
 	}
 	else
 	{
-		int tmp = height;
-		rotate_mirror_translate (cr, M_PI/2, x, y, FALSE, FALSE);
-		height = width;
-		width = tmp;
+/*		int tmp = height;*/
+/*		rotate_mirror_translate (cr, M_PI/2, x, y, FALSE, FALSE);*/
+/*		height = width;*/
+/*		width = tmp;*/
+		murrine_exchange_axis (cr, &x, &y, &width, &height);
 	}
 
 	/* Draw fill */
@@ -2068,12 +2072,7 @@ murrine_draw_scrollbar_slider (cairo_t *cr,
 	if (scrollbar->horizontal)
 		cairo_translate (cr, x, y);
 	else
-	{
-		int tmp = height;
-		rotate_mirror_translate (cr, M_PI/2, x, y, FALSE, FALSE);
-		height = width;
-		width = tmp;
-	}
+		murrine_exchange_axis (cr, &x, &y, &width, &height);
 
 	cairo_save (cr);
 
@@ -2485,10 +2484,11 @@ murrine_draw_handle (cairo_t *cr,
 
 	if (handle->horizontal)
 	{
-		int tmp = height;
-		rotate_mirror_translate (cr, M_PI/2, x+0.5+width/2-bar_height/2, y+height/2-bar_width/2, FALSE, FALSE);
-		height = width;
-		width = tmp;
+/*		int tmp = height;*/
+/*		rotate_mirror_translate (cr, M_PI/2, x+0.5+width/2-bar_height/2, y+height/2-bar_width/2, FALSE, FALSE);*/
+/*		height = width;*/
+/*		width = tmp;*/
+		murrine_exchange_axis (cr, &x, &y, &width, &height);
 	}
 	else
 	{
