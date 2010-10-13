@@ -719,8 +719,8 @@ murrine_draw_slider_handle (cairo_t *cr,
 
 	if (!horizontal)
 	{
-		rotate_mirror_translate (cr, M_PI/2, x, y, FALSE, FALSE);
-		int tmp = height; height = width; width = tmp;
+		murrine_exchange_axis (cr, &x, &y, &width, &height);
+		cairo_translate (cr, x, y);
 	}
 
 	if (width % 2 != 0)
@@ -2783,8 +2783,6 @@ murrine_draw_arrow (cairo_t *cr,
 		                     tx+0.5, ty+0.5, width, height);
 		cairo_restore (cr);
 	}
-
-/*	cairo_identity_matrix (cr);*/
 
 	_murrine_draw_arrow (cr, &color, arrow,
 	                     tx, ty, width, height);
