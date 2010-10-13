@@ -75,12 +75,21 @@ boolean murrine_widget_is_rgba (GtkWidget *widget)
 #ifdef HAVE_RGBA
 	if (gdk_screen_is_composited(screen))
 	{
-	/* XXX RGBA is disabled for the moment */
-/*		GdkVisual *visual = gtk_widget_get_visual (widget);*/
-/*		if (gdk_visual_get_depth (visual) == 32 && (visual->red_mask   == 0xff0000 &&*/
-/*		                            visual->green_mask == 0x00ff00 &&*/
-/*		                            visual->blue_mask  == 0x0000ff))*/
-			use_rgba = FALSE;
+		GdkVisual *visual;
+		guint32 *red_mask;
+		guint32 *green_mask;
+		guint32 *blue_mask;
+
+		visual = gtk_widget_get_visual (widget);
+
+		gdk_visual_get_red_pixel_details (visual, red_mask, NULL, NULL);
+		gdk_visual_get_green_pixel_details (visual, green_mask, NULL, NULL);
+		gdk_visual_get_blue_pixel_details (visual, blue_mask, NULL, NULL);
+
+		if (gdk_visual_get_depth (visual) == 32 && (red_mask == 0xff0000 &&
+		                                            green_mask == 0x00ff00 &&
+		                                            blue_mask  == 0x0000ff))
+			use_rgba = TRUE;
 	}
 #endif
 
