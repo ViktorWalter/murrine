@@ -663,6 +663,7 @@ murrine_style_draw_handle (DRAW_ARGS, GtkOrientation orientation)
 
 		murrine_set_widget_parameters (widget, style, state_type, &params);
 
+
 		STYLE_FUNCTION(draw_handle) (cr, colors, &params, &handle, x, y, width, height);
 	}
 	else if (DETAIL ("paned"))
@@ -2670,6 +2671,7 @@ murrine_style_class_init (MurrineStyleClass *klass)
 	style_class->draw_extension   = murrine_style_draw_extension;
 	style_class->draw_flat_box    = murrine_style_draw_flat_box;
 	style_class->draw_focus       = murrine_style_draw_focus;
+	style_class->draw_handle      = murrine_style_draw_handle;
 	style_class->draw_hline       = murrine_style_draw_hline;
 	style_class->draw_option      = murrine_style_draw_option;
 	style_class->render_icon      = murrine_style_draw_render_icon;
