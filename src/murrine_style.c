@@ -1268,35 +1268,6 @@ murrine_style_draw_box (DRAW_ARGS)
 			STYLE_FUNCTION(draw_slider_handle) (cr, &murrine_style->colors, &params, &handle, x, y, width, height, horizontal);
 		}
 	}
-	else if (DETAIL ("optionmenu"))
-	{
-		WidgetParameters params;
-		OptionMenuParameters optionmenu;
-
-		GtkRequisition indicator_size;
-		GtkBorder indicator_spacing;
-
-		murrine_option_menu_get_props (widget, &indicator_size, &indicator_spacing);
-
-		if (widget && murrine_get_direction (widget) == GTK_TEXT_DIR_RTL)
-			optionmenu.linepos = (indicator_size.width+indicator_spacing.left+indicator_spacing.right)+style->xthickness;
-		else
-			optionmenu.linepos = width-(indicator_size.width+indicator_spacing.left+indicator_spacing.right)-style->xthickness;
-
-		murrine_set_widget_parameters (widget, style, state_type, &params);
-
-		if (murrine_style->comboboxstyle > 0)
-		{
-			ComboBoxParameters combobox;
-			combobox.as_list = FALSE;
-			combobox.box_w = indicator_size.width+indicator_spacing.left+indicator_spacing.right+3;
-			combobox.style = murrine_style->comboboxstyle;
-			combobox.prelight_shade = murrine_style->prelight_shade;
-			STYLE_FUNCTION(draw_combobox) (cr, murrine_style->colors, params, &combobox, x, y, width, height, TRUE);
-		}
-		else
-			STYLE_FUNCTION(draw_optionmenu) (cr, colors, &params, &optionmenu, x, y, width, height);
-	}
 	else if (DETAIL ("menuitem"))
 	{
 		WidgetParameters params;
@@ -1994,7 +1965,6 @@ murrine_style_draw_layout (GtkStyle     *style,
 				    MRN_IS_COMBO_BOX(gtk_widget_get_parent (widget)) ||
 				    MRN_IS_COMBO_BOX_ENTRY(gtk_widget_get_parent (widget)) ||
 				    MRN_IS_COMBO(gtk_widget_get_parent (widget)) ||
-				    MRN_IS_OPTION_MENU(gtk_widget_get_parent (widget)) ||
 				    MRN_IS_NOTEBOOK(gtk_widget_get_parent (widget)))
 				{
 					GtkReliefStyle relief = GTK_RELIEF_NORMAL;

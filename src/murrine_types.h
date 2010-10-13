@@ -463,12 +463,6 @@ struct _MurrineStyleFunctions
 	                              const WidgetParameters *widget,
 	                              int x, int y, int width, int height);
 
-	void (*draw_optionmenu) (cairo_t *cr,
-	                         const MurrineColors        *colors,
-	                         const WidgetParameters     *widget,
-	                         const OptionMenuParameters *optionmenu,
-	                         int x, int y, int width, int height);
-
 	void (*draw_menubar) (cairo_t *cr,
 	                      const MurrineColors    *colors,
 	                      const WidgetParameters *widget,

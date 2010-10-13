@@ -1051,34 +1051,6 @@ murrine_draw_combobox (cairo_t *cr,
 }
 
 static void
-murrine_draw_optionmenu (cairo_t *cr,
-                         const MurrineColors        *colors,
-                         const WidgetParameters     *widget,
-                         const OptionMenuParameters *optionmenu,
-                         int x, int y, int width, int height)
-{
-	ButtonParameters button;
-	button.has_default_button_color = FALSE;
-	int offset = widget->ythickness + 1;
-
-	boolean horizontal = TRUE;
-	if (((float)width/height<0.5) || (widget->glazestyle > 0 && width<height))
-		horizontal = FALSE;
-
-	widget->style_functions->draw_button (cr, colors, widget, &button, x, y, width, height, horizontal);
-
-	/* Draw the separator */
-	MurrineRGB *dark = (MurrineRGB*)&colors->shade[6];
-
-	cairo_translate        (cr, optionmenu->linepos+0.5, 1);
-
-	murrine_set_color_rgba (cr, dark, 0.4);
-	cairo_move_to          (cr, 0.0, offset);
-	cairo_line_to          (cr, 0.0, height - offset - widget->ythickness + 1);
-	cairo_stroke           (cr);
-}
-
-static void
 murrine_draw_menubar (cairo_t *cr,
                       const MurrineColors *colors,
                       const WidgetParameters *widget,
@@ -3670,7 +3642,6 @@ murrine_register_style_murrine (MurrineStyleFunctions *functions)
 	functions->draw_slider_handle      = murrine_draw_slider_handle;
 	functions->draw_spinbutton         = murrine_draw_spinbutton;
 	functions->draw_spinbutton_down    = murrine_draw_spinbutton_down;
-	functions->draw_optionmenu         = murrine_draw_optionmenu;
 	functions->draw_combo_separator    = murrine_draw_combo_separator;
 	functions->draw_menubar	           = murrine_draw_menubar;
 	functions->draw_tab                = murrine_draw_tab;
