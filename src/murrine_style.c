@@ -954,7 +954,7 @@ murrine_style_draw_box (DRAW_ARGS)
 
 		slider.lower = DETAIL ("trough-lower");
 		slider.fill_level = DETAIL ("trough-fill-level") || DETAIL ("trough-fill-level-full");
-		slider.horizontal = gtk_orientable_get_orientation (GTK_ORIENTABLE (widget)); /* width>=height; *//* XXX fallback based on size, is there an API? */
+		slider.horizontal = gtk_orientable_get_orientation (GTK_ORIENTABLE (widget)) == GTK_ORIENTATION_HORIZONTAL;
 
 		murrine_set_widget_parameters (widget, style, state_type, &params);
 		params.corners = MRN_CORNER_ALL;
@@ -2344,9 +2344,7 @@ murrine_style_realize (GtkStyle *style)
 
 	contrast = MURRINE_RC_STYLE (style->rc_style)->contrast;
 
-	bg_normal.r = style->bg[0].red/65535.0;
-	bg_normal.g = style->bg[0].green/65535.0;
-	bg_normal.b = style->bg[0].blue/65535.0;
+	murrine_gdk_color_to_murrinergb (&style->bg[GTK_STATE_NORMAL], &bg_normal);
 
 	/* (GtkWidget *) Apply contrast */
 	for (i = 0; i < 9; i++)
@@ -2357,9 +2355,7 @@ murrine_style_realize (GtkStyle *style)
 	}
 	spots[2] = murrine_get_contrast(spots[2], contrast);
 
-	spot_color.r = style->bg[GTK_STATE_SELECTED].red/65535.0;
-	spot_color.g = style->bg[GTK_STATE_SELECTED].green/65535.0;
-	spot_color.b = style->bg[GTK_STATE_SELECTED].blue/65535.0;
+	murrine_gdk_color_to_murrinergb (&style->bg[GTK_STATE_SELECTED], &spot_color);
 
 	murrine_shade (&spot_color, spots[0], &murrine_style->colors.spot[0]);
 	murrine_shade (&spot_color, spots[1], &murrine_style->colors.spot[1]);
@@ -2367,25 +2363,10 @@ murrine_style_realize (GtkStyle *style)
 
 	for (i=0; i<5; i++)
 	{
-		murrine_gdk_color_to_rgb (&style->bg[i],
-		                          &murrine_style->colors.bg[i].r,
-		                          &murrine_style->colors.bg[i].g,
-		                          &murrine_style->colors.bg[i].b);
-
-		murrine_gdk_color_to_rgb (&style->base[i],
-		                          &murrine_style->colors.base[i].r,
-		                          &murrine_style->colors.base[i].g,
-		                          &murrine_style->colors.base[i].b);
-
-		murrine_gdk_color_to_rgb (&style->text[i],
-		                          &murrine_style->colors.text[i].r,
-		                          &murrine_style->colors.text[i].g,
-		                          &murrine_style->colors.text[i].b);
-
-		murrine_gdk_color_to_rgb (&style->fg[i],
-		                          &murrine_style->colors.fg[i].r,
-		                          &murrine_style->colors.fg[i].g,
-		                          &murrine_style->colors.fg[i].b);
+		murrine_gdk_color_to_murrinergb (&style->bg[i], &murrine_style->colors.bg[i]);
+		murrine_gdk_color_to_murrinergb (&style->base[i], &murrine_style->colors.base[i]);
+		murrine_gdk_color_to_murrinergb (&style->text[i], &murrine_style->colors.text[i]);
+		murrine_gdk_color_to_murrinergb (&style->fg[i], &murrine_style->colors.fg[i]);
 	}
 }
 

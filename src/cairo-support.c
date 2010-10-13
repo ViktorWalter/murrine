@@ -263,6 +263,22 @@ murrine_gdk_color_to_rgb (GdkColor *c, double *r, double *g, double *b)
 }
 
 void
+murrine_gdk_color_to_murrinergb (const GdkColor *c, MurrineRGB *cc)
+{
+	gdouble r, g, b;
+
+	g_return_if_fail (c && cc);
+
+	r = c->red / 65535.0;
+	g = c->green / 65535.0;
+	b = c->blue / 65535.0;
+
+	cc->r = r;
+	cc->g = g;
+	cc->b = b;
+}
+
+void
 murrine_get_parent_bg (const GtkWidget *widget, MurrineRGB *color)
 {
 	GtkStateType state_type;

@@ -33,6 +33,8 @@ G_GNUC_INTERNAL void murrine_mix_color (const MurrineRGB *color1, const MurrineR
 G_GNUC_INTERNAL void murrine_gdk_color_to_rgb (GdkColor *c,
                                                double *r, double *g, double *b);
 
+G_GNUC_INTERNAL void murrine_gdk_color_to_murrinergb (const GdkColor * gc, MurrineRGB *cc);
+
 G_GNUC_INTERNAL void murrine_get_parent_bg (const GtkWidget *widget,
                                             MurrineRGB *color);
 

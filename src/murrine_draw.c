@@ -2778,11 +2778,13 @@ murrine_draw_arrow (cairo_t *cr,
 
 	if (widget->disabled)
 	{
+		cairo_save (cr);
 		_murrine_draw_arrow (cr, &colors->shade[0], arrow,
 		                     tx+0.5, ty+0.5, width, height);
+		cairo_restore (cr);
 	}
 
-	cairo_identity_matrix (cr);
+/*	cairo_identity_matrix (cr);*/
 
 	_murrine_draw_arrow (cr, &color, arrow,
 	                     tx, ty, width, height);
