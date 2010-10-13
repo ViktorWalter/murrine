@@ -306,6 +306,7 @@ typedef struct
 	boolean         horizontal;
 	boolean         has_color;
 	boolean         within_bevel;
+	boolean         trough_upper;
 	int             handlestyle;
 	int             style;
 	int             steppersize;

@@ -1928,20 +1928,24 @@ murrine_draw_scrollbar_trough (cairo_t *cr,
 		murrine_rounded_rectangle_closed (cr, 0.5, 0.5, width-1, height-1, widget->roundness, widget->corners);
 		cairo_clip (cr);
 
-		corners = MRN_CORNER_BOTTOMLEFT | MRN_CORNER_BOTTOMRIGHT;
-		murrine_rounded_rectangle_inverted (cr, 0.5, 0.5, width-1, scrollbar->steppersize, widget->roundness, corners);
-		murrine_set_color_rgb (cr, &fill_stepper);
-		cairo_fill_preserve (cr);
-		murrine_draw_trough_border_from_path (cr, &border,0.5, 0.5, width-1, scrollbar->steppersize, widget->mrn_gradient, 1.0, FALSE);
-
-		corners = MRN_CORNER_TOPLEFT | MRN_CORNER_TOPRIGHT;
-		murrine_rounded_rectangle_inverted (cr, 0.5, height-scrollbar->steppersize-0.5, width-1, scrollbar->steppersize, widget->roundness, corners);
-		murrine_set_color_rgb (cr, &fill_stepper);
-		cairo_fill_preserve (cr);
-		murrine_draw_trough_border_from_path (cr, &border, 0.5, height-scrollbar->steppersize-0.5, width-1, scrollbar->steppersize, widget->mrn_gradient, 1.0, FALSE);
-
-		cairo_restore (cr);
+		if (!scrollbar->trough_upper)
+		{
+			corners = MRN_CORNER_BOTTOMLEFT | MRN_CORNER_BOTTOMRIGHT;
+			murrine_rounded_rectangle_inverted (cr, 0.5, 0.5, width-1, scrollbar->steppersize, widget->roundness, corners);
+			murrine_set_color_rgb (cr, &fill_stepper);
+			cairo_fill_preserve (cr);
+			murrine_draw_trough_border_from_path (cr, &border,0.5, 0.5, width-1, scrollbar->steppersize, widget->mrn_gradient, 1.0, FALSE);
+		}
+		else
+		{
+			corners = MRN_CORNER_TOPLEFT | MRN_CORNER_TOPRIGHT;
+			murrine_rounded_rectangle_inverted (cr, 0.5, height-scrollbar->steppersize-0.5, width-1, scrollbar->steppersize, widget->roundness, corners);
+			murrine_set_color_rgb (cr, &fill_stepper);
+			cairo_fill_preserve (cr);
+			murrine_draw_trough_border_from_path (cr, &border, 0.5, height-scrollbar->steppersize-0.5, width-1, scrollbar->steppersize, widget->mrn_gradient, 1.0, FALSE);
 	}
+			cairo_restore (cr);
+		}
 
 	/* Draw border */
 	if (!scrollbar->within_bevel)

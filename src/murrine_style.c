@@ -1021,7 +1021,7 @@ murrine_style_draw_box (DRAW_ARGS)
 
 		STYLE_FUNCTION(draw_progressbar_trough) (cr, colors, &params, &progressbar, x, y, width, height);
 	}
-	else if (DETAIL ("trough") && widget && (MRN_IS_VSCROLLBAR (widget) || MRN_IS_HSCROLLBAR (widget)))
+	else if ((DETAIL ("trough-upper") || DETAIL ("trough-lower")) && widget && (MRN_IS_VSCROLLBAR (widget) || MRN_IS_HSCROLLBAR (widget)))
 	{
 		WidgetParameters params;
 		ScrollBarParameters scrollbar;
@@ -1034,6 +1034,7 @@ murrine_style_draw_box (DRAW_ARGS)
 		scrollbar.junction     = murrine_scrollbar_get_junction (widget);
 		scrollbar.stepperstyle = murrine_style->stepperstyle;
 		scrollbar.within_bevel = within_bevel;
+		scrollbar.trough_upper = DETAIL ("trough-upper");
 		gtk_widget_style_get (widget, "stepper-size", &scrollbar.steppersize, NULL);
 
 		murrine_set_widget_parameters (widget, style, state_type, &params);
@@ -1041,8 +1042,7 @@ murrine_style_draw_box (DRAW_ARGS)
 		if (within_bevel)
 			params.corners = MRN_CORNER_NONE;
 
-		if (MRN_IS_RANGE (widget))
-			scrollbar.horizontal = gtk_orientable_get_orientation (GTK_ORIENTABLE (widget)) == GTK_ORIENTATION_HORIZONTAL;
+		scrollbar.horizontal = gtk_orientable_get_orientation ((GtkOrientable*)widget) == GTK_ORIENTATION_HORIZONTAL;
 
 		if (murrine_style->stepperstyle != 1 && murrine_style->stepperstyle != 3 && !params.mrn_gradient.use_rgba)
 		{
@@ -1057,8 +1057,6 @@ murrine_style_draw_box (DRAW_ARGS)
 				height -= 4;
 			}
 		}
-
-		printf( "draw_scrollbar_trough: %s %s\n", detail, G_OBJECT_TYPE_NAME (widget));
 
 		STYLE_FUNCTION(draw_scrollbar_trough) (cr, colors, &params, &scrollbar, x, y, width, height);
 	}
@@ -1342,8 +1340,7 @@ murrine_style_draw_box (DRAW_ARGS)
 		scrollbar.prelight_shade = murrine_style->prelight_shade;
 		gtk_widget_style_get (widget, "stepper-size", &scrollbar.steppersize, NULL);
 
-		if (MRN_IS_RANGE (widget))
-			scrollbar.horizontal = gtk_orientable_get_orientation ((GtkOrientable*)widget) == GTK_ORIENTATION_HORIZONTAL;
+		scrollbar.horizontal = g_str_has_prefix (detail, "hscrollbar");
 
 		if (murrine_style->colorize_scrollbar)
 		{
@@ -1372,20 +1369,20 @@ murrine_style_draw_box (DRAW_ARGS)
 			else
 				stepper.stepper = MRN_STEPPER_UNKNOWN;
 
-			/* XXX Check later for corners */
+			/* XXX Check later for corners - might be OK 20101013 */
 
 			if (scrollbar.horizontal)
 			{
 				if (stepper.stepper == MRN_STEPPER_START)
 					params.corners = MRN_CORNER_TOPLEFT | MRN_CORNER_BOTTOMLEFT;
-				else if (stepper.stepper == MRN_STEPPER_END_INNER)
+				else if (stepper.stepper == MRN_STEPPER_END)
 					params.corners = MRN_CORNER_TOPRIGHT | MRN_CORNER_BOTTOMRIGHT;
 			}
 			else
 			{
 				if (stepper.stepper == MRN_STEPPER_START)
 					params.corners = MRN_CORNER_BOTTOMLEFT | MRN_CORNER_TOPLEFT;
-				else if (stepper.stepper == MRN_STEPPER_END_INNER)
+				else if (stepper.stepper == MRN_STEPPER_END)
 					params.corners = MRN_CORNER_TOPRIGHT | MRN_CORNER_BOTTOMRIGHT;
 			}
 		}
@@ -1402,8 +1399,6 @@ murrine_style_draw_box (DRAW_ARGS)
 
 		if (scrollbar.stepperstyle == 2)
 			params.corners = MRN_CORNER_NONE;
-
-		printf( "draw_scrollbar_stepper: %s %s\n", detail, G_OBJECT_TYPE_NAME (widget));
 
 		if (scrollbar.stepperstyle != 1 && scrollbar.stepperstyle != 3)
 			STYLE_FUNCTION(draw_scrollbar_stepper) (cr, colors, &params, &scrollbar, x, y, width, height);
@@ -1545,8 +1540,6 @@ murrine_style_draw_slider (DRAW_ARGS, GtkOrientation orientation)
 			params.corners = MRN_CORNER_ALL;
 		else
 			params.corners = MRN_CORNER_NONE;
-
-		printf( "draw_scrollbar_slider: %s %s\n", detail, G_OBJECT_TYPE_NAME (widget));
 
 		STYLE_FUNCTION(draw_scrollbar_slider) (cr, colors, &params, &scrollbar, x, y, width, height);
 	}
