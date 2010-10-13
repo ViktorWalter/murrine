@@ -1119,10 +1119,8 @@ murrine_style_draw_box (DRAW_ARGS)
 #ifdef HAVE_ANIMATION
 		if(murrine_style->animation && MRN_IS_PROGRESS_BAR (widget))
 		{
-			gboolean activity_mode = GTK_PROGRESS (widget)->activity_mode;
-
-			if (!activity_mode)
-				murrine_animation_progressbar_add ((gpointer)widget);
+#warning Assuming non-pulsing progress bars because there is currently no way to query them in GTK+ 3.0.
+			murrine_animation_progressbar_add ((gpointer)widget);
 		}
 
 		elapsed = murrine_animation_elapsed (widget);
