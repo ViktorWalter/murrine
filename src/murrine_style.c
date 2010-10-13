@@ -76,15 +76,15 @@ boolean murrine_widget_is_rgba (GtkWidget *widget)
 	if (gdk_screen_is_composited(screen))
 	{
 		GdkVisual *visual;
-		guint32 *red_mask;
-		guint32 *green_mask;
-		guint32 *blue_mask;
+		guint32 red_mask;
+		guint32 green_mask;
+		guint32 blue_mask;
 
 		visual = gtk_widget_get_visual (widget);
 
-		gdk_visual_get_red_pixel_details (visual, red_mask, NULL, NULL);
-		gdk_visual_get_green_pixel_details (visual, green_mask, NULL, NULL);
-		gdk_visual_get_blue_pixel_details (visual, blue_mask, NULL, NULL);
+		gdk_visual_get_red_pixel_details (visual, &red_mask, NULL, NULL);
+		gdk_visual_get_green_pixel_details (visual, &green_mask, NULL, NULL);
+		gdk_visual_get_blue_pixel_details (visual, &blue_mask, NULL, NULL);
 
 		if (gdk_visual_get_depth (visual) == 32 && (red_mask == 0xff0000 &&
 		                                            green_mask == 0x00ff00 &&
