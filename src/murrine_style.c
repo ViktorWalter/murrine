@@ -57,6 +57,8 @@
 
 #define STYLE_FUNCTION(function) (MURRINE_STYLE_GET_CLASS (style)->style_functions[params.style].function)
 
+#define PRINT_DETAIL(section,detail,widget) printf("%s: %s %s\n", section, detail, G_OBJECT_TYPE_NAME (widget));
+
 G_DEFINE_DYNAMIC_TYPE (MurrineStyle, murrine_style, GTK_TYPE_STYLE)
 
 static
@@ -1842,7 +1844,7 @@ murrine_style_draw_arrow (GtkStyle     *style,
 				height = 5; width = 4;
 			}
 		}
-		else if (DETAIL ("hscrollbar") || DETAIL ("vscrollbar"))
+		else if (g_str_has_prefix (detail, "hscrollbar") || g_str_has_prefix (detail, "vscrollbar"))
 		{
 			int steppersize;
 			gtk_widget_style_get (widget, "stepper-size", &steppersize, NULL);	
