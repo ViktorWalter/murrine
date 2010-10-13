@@ -1625,7 +1625,6 @@ murrine_style_draw_vline (GtkStyle     *style,
 {
 	/* Get toplevel window for this widget */
 	GtkWidget* toplevel = gtk_widget_get_toplevel (widget);
-	GtkWidget* parent = gtk_widget_get_parent (widget);
 
 	MurrineStyle  *murrine_style = MURRINE_STYLE (style);
 	MurrineColors *colors = &murrine_style->colors;
@@ -1645,12 +1644,10 @@ murrine_style_draw_vline (GtkStyle     *style,
 		params.style = MRN_STYLE_RGBA;
 	}
 
-	
-
-	if (!(widget && parent && gtk_widget_get_parent (parent) &&
+	if (!(widget &&
 	    MRN_IS_HBOX (gtk_widget_get_parent (widget)) &&
-	    MRN_IS_TOGGLE_BUTTON (gtk_widget_get_parent (parent)) &&
-	    MRN_IS_COMBO_BOX (gtk_widget_get_parent (parent))))
+	    MRN_IS_TOGGLE_BUTTON (gtk_widget_get_parent (gtk_widget_get_parent (widget))) &&
+	    MRN_IS_COMBO_BOX (gtk_widget_get_parent (gtk_widget_get_parent (gtk_widget_get_parent (widget))))))
 	{
 		STYLE_FUNCTION(draw_separator) (cr, colors, &params, &separator, x, y1, 2, y2-y1);
 	}
