@@ -1,4 +1,4 @@
-xmldir = $(datadir)/gtk-engines
+xmldir = $(datadir)/gtk-engines/3.0
 
 xml_DATA = murrine.xml
 xml_in_files = $(xml_DATA:.xml=.xml.in)
