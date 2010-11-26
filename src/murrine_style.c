@@ -489,6 +489,45 @@ murrine_style_draw_shadow (DRAW_ARGS)
 		murrine_set_color_rgb (cr, &colors->shade[5]);
 		cairo_stroke (cr);
 	}
+	else if ((DETAIL ("trough-upper") || DETAIL ("trough-lower")) && widget && (MRN_IS_VSCROLLBAR (widget) || MRN_IS_HSCROLLBAR (widget) || MRN_IS_SCROLLBAR (widget)))
+	{
+		WidgetParameters params;
+		ScrollBarParameters scrollbar;
+		boolean within_bevel = FALSE;
+
+		if (gtk_widget_get_parent (widget) && MRN_IS_SCROLLED_WINDOW (gtk_widget_get_parent (widget)))
+			gtk_widget_style_get (gtk_widget_get_parent (widget), "scrollbars-within-bevel", &within_bevel, NULL);
+
+		scrollbar.horizontal   = TRUE;
+		scrollbar.junction     = murrine_scrollbar_get_junction (widget);
+		scrollbar.stepperstyle = murrine_style->stepperstyle;
+		scrollbar.within_bevel = within_bevel;
+		scrollbar.trough_upper = DETAIL ("trough-upper");
+		gtk_widget_style_get (widget, "stepper-size", &scrollbar.steppersize, NULL);
+
+		murrine_set_widget_parameters (widget, style, state_type, &params);
+
+		if (within_bevel)
+			params.corners = MRN_CORNER_NONE;
+
+		scrollbar.horizontal = gtk_orientable_get_orientation ((GtkOrientable*)widget) == GTK_ORIENTATION_HORIZONTAL;
+
+		if (murrine_style->stepperstyle != 1 && murrine_style->stepperstyle != 3 && !params.mrn_gradient.use_rgba)
+		{
+			if (scrollbar.horizontal)
+			{
+				x += 2;
+				width -= 4;
+			}
+			else
+			{
+				y += 2;
+				height -= 4;
+			}
+		}
+
+		STYLE_FUNCTION(draw_scrollbar_trough) (cr, colors, &params, &scrollbar, x, y, width, height);
+	}
 	else
 	{
 		WidgetParameters params;
@@ -1032,45 +1071,6 @@ murrine_style_draw_box (DRAW_ARGS)
 		}
 
 		STYLE_FUNCTION(draw_progressbar_trough) (cr, colors, &params, &progressbar, x, y, width, height);
-	}
-	else if ((DETAIL ("trough-upper") || DETAIL ("trough-lower")) && widget && (MRN_IS_VSCROLLBAR (widget) || MRN_IS_HSCROLLBAR (widget)))
-	{
-		WidgetParameters params;
-		ScrollBarParameters scrollbar;
-		boolean within_bevel = FALSE;
-
-		if (gtk_widget_get_parent (widget) && MRN_IS_SCROLLED_WINDOW (gtk_widget_get_parent (widget)))
-			gtk_widget_style_get (gtk_widget_get_parent (widget), "scrollbars-within-bevel", &within_bevel, NULL);
-
-		scrollbar.horizontal   = TRUE;
-		scrollbar.junction     = murrine_scrollbar_get_junction (widget);
-		scrollbar.stepperstyle = murrine_style->stepperstyle;
-		scrollbar.within_bevel = within_bevel;
-		scrollbar.trough_upper = DETAIL ("trough-upper");
-		gtk_widget_style_get (widget, "stepper-size", &scrollbar.steppersize, NULL);
-
-		murrine_set_widget_parameters (widget, style, state_type, &params);
-
-		if (within_bevel)
-			params.corners = MRN_CORNER_NONE;
-
-		scrollbar.horizontal = gtk_orientable_get_orientation ((GtkOrientable*)widget) == GTK_ORIENTATION_HORIZONTAL;
-
-		if (murrine_style->stepperstyle != 1 && murrine_style->stepperstyle != 3 && !params.mrn_gradient.use_rgba)
-		{
-			if (scrollbar.horizontal)
-			{
-				x += 2;
-				width -= 4;
-			}
-			else
-			{
-				y += 2;
-				height -= 4;
-			}
-		}
-
-		STYLE_FUNCTION(draw_scrollbar_trough) (cr, colors, &params, &scrollbar, x, y, width, height);
 	}
 	else if (DETAIL ("bar"))
 	{
