@@ -17,10 +17,8 @@ libmurrine_la_SOURCES = \
 	./src/config.h \
 	./src/support.c \
 	./src/support.h \
-	./src/murrine_rc_style.c \
-	./src/murrine_rc_style.h \
-	./src/murrine_style.c \
-	./src/murrine_style.h \
+	./src/murrine_engine.c \
+	./src/murrine_engine.h \
 	./src/murrine_theme_main.c \
 	./src/murrine_draw.c \
 	./src/murrine_draw_rgba.c \

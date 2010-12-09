@@ -21,15 +21,13 @@
 #include <gmodule.h>
 #include <gtk/gtk.h>
 
-#include "murrine_style.h"
-#include "murrine_rc_style.h"
+#include "murrine_engine.h"
 
 G_MODULE_EXPORT void
 theme_init (GTypeModule *module)
 {
 //	printf ("Murrine 0.91.x Development Snapshot, Copyright Andrea Cimitan\n"); 
-	murrine_rc_style_register_types (module);
-	murrine_style_register_types (module);
+	murrine_engine_register_types (module);
 }
 
 G_MODULE_EXPORT void
@@ -37,10 +35,12 @@ theme_exit (void)
 {
 }
 
-G_MODULE_EXPORT GtkRcStyle *
-theme_create_rc_style (void)
+G_MODULE_EXPORT GtkThemingEngine *
+theme_create_engine (void)
 {
-	return GTK_RC_STYLE (g_object_new (MURRINE_TYPE_RC_STYLE, NULL));
+	return GTK_THEMING_ENGINE (g_object_new (MURRINE_TYPE_ENGINE,
+	                                         "name", "murrine",
+	                                         NULL));
 }
 
 /* The following function will be called by GTK+ when the module

@@ -21,7 +21,6 @@
 #include <cairo.h>
 
 #include "murrine_draw.h"
-#include "murrine_style.h"
 #include "murrine_types.h"
 #include "support.h"
 #include "cairo-support.h"
