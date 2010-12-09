@@ -206,7 +206,7 @@ murrine_set_widget_parameters (const GtkWidget  *widget,
 
 	params->mrn_gradient = mrn_gradient;
 	params->style = mrn_style;
-	params->style_functions = &(MURRINE_STYLE_GET_CLASS (style)->style_functions[mrn_style]);
+	params->style_functions = &(MURRINE_ENGINE_GET_CLASS (style)->style_functions[mrn_style]);
 
 	/* I want to avoid to have to do this. I need it for GtkEntry, unless I
 	   find out why it doesn't behave the way I expect it to. */
@@ -215,7 +215,7 @@ murrine_set_widget_parameters (const GtkWidget  *widget,
 }
 
 static void
-murrine_style_draw_flat_box (DRAW_ARGS)
+murrine_engine_draw_flat_box (DRAW_ARGS)
 {
 	////printf( "draw_flat_box: %s %s\n", detail, G_OBJECT_TYPE_NAME (widget));
 	if (detail &&
@@ -283,7 +283,7 @@ murrine_style_draw_flat_box (DRAW_ARGS)
 
 			if (!use_rgba)
 			{
-				GTK_STYLE_CLASS (murrine_style_parent_class)->draw_flat_box (style, cr, state_type,
+				GTK_STYLE_CLASS (murrine_engine_parent_class)->draw_flat_box (style, cr, state_type,
 		                                                                             shadow_type,
 		                                                                             widget, detail,
 		                                                                             x, y, width, height);
@@ -322,7 +322,7 @@ murrine_style_draw_flat_box (DRAW_ARGS)
 		else
 		{
 /*			printf( "draw_flat_box: %s %s\n", detail, G_OBJECT_TYPE_NAME (widget));*/
-				GTK_STYLE_CLASS (murrine_style_parent_class)->draw_flat_box (style, cr, state_type,
+				GTK_STYLE_CLASS (murrine_engine_parent_class)->draw_flat_box (style, cr, state_type,
 		                                                                             shadow_type,
 		                                                                             widget, detail,
 		                                                                             x, y, width, height);
@@ -375,7 +375,7 @@ murrine_style_draw_flat_box (DRAW_ARGS)
 }
 
 static void
-murrine_style_draw_shadow (DRAW_ARGS)
+murrine_engine_draw_shadow (DRAW_ARGS)
 {
 	MurrineStyle  *murrine_style = MURRINE_STYLE (style);
 	MurrineColors *colors = &murrine_style->colors;
@@ -546,7 +546,7 @@ murrine_style_draw_shadow (DRAW_ARGS)
 }
 
 static void
-murrine_style_draw_box_gap (DRAW_ARGS,
+murrine_engine_draw_box_gap (DRAW_ARGS,
                             GtkPositionType gap_side,
                             gint            gap_x,
                             gint            gap_width)
@@ -644,7 +644,7 @@ murrine_style_draw_box_gap (DRAW_ARGS,
 	else
 	{
 		//printf( "draw_box_gap: %s %s\n", detail, G_OBJECT_TYPE_NAME (widget));
-		GTK_STYLE_CLASS (murrine_style_parent_class)->draw_box_gap (style, cr, state_type, shadow_type,
+		GTK_STYLE_CLASS (murrine_engine_parent_class)->draw_box_gap (style, cr, state_type, shadow_type,
 		                                                            widget, detail,
 		                                                            x, y, width, height,
 		                                                            gap_side, gap_x, gap_width);
@@ -652,7 +652,7 @@ murrine_style_draw_box_gap (DRAW_ARGS,
 }
 
 static void
-murrine_style_draw_extension (DRAW_ARGS, GtkPositionType gap_side)
+murrine_engine_draw_extension (DRAW_ARGS, GtkPositionType gap_side)
 {
 	MurrineStyle  *murrine_style = MURRINE_STYLE (style);
 	MurrineColors *colors = &murrine_style->colors;
@@ -688,13 +688,13 @@ murrine_style_draw_extension (DRAW_ARGS, GtkPositionType gap_side)
 	else
 	{
 		//printf( "draw_extension: %s %s\n", detail, G_OBJECT_TYPE_NAME (widget));
-		GTK_STYLE_CLASS (murrine_style_parent_class)->draw_extension (style, cr, state_type, shadow_type,
+		GTK_STYLE_CLASS (murrine_engine_parent_class)->draw_extension (style, cr, state_type, shadow_type,
 		                                                              widget, detail, x, y, width, height, gap_side);
 	}
 }
 
 static void
-murrine_style_draw_handle (DRAW_ARGS, GtkOrientation orientation)
+murrine_engine_draw_handle (DRAW_ARGS, GtkOrientation orientation)
 {
 	MurrineStyle  *murrine_style = MURRINE_STYLE (style);
 	MurrineColors *colors = &murrine_style->colors;
@@ -744,7 +744,7 @@ murrine_style_draw_handle (DRAW_ARGS, GtkOrientation orientation)
 }
 
 static void
-murrine_style_draw_box (DRAW_ARGS)
+murrine_engine_draw_box (DRAW_ARGS)
 {
 	MurrineStyle *murrine_style = MURRINE_STYLE (style);
 	MurrineColors *colors = &murrine_style->colors;
@@ -1460,13 +1460,13 @@ murrine_style_draw_box (DRAW_ARGS)
 	else
 	{
 		//printf( "draw_box: %s %s\n", detail, G_OBJECT_TYPE_NAME (widget));
-		GTK_STYLE_CLASS (murrine_style_parent_class)->draw_box (style, cr, state_type, shadow_type,
+		GTK_STYLE_CLASS (murrine_engine_parent_class)->draw_box (style, cr, state_type, shadow_type,
 		                                                        widget, detail, x, y, width, height);
 	}
 }
 
 static void
-murrine_style_draw_slider (DRAW_ARGS, GtkOrientation orientation)
+murrine_engine_draw_slider (DRAW_ARGS, GtkOrientation orientation)
 {
 	MurrineStyle *murrine_style = MURRINE_STYLE (style);
 	MurrineColors *colors = &murrine_style->colors;
@@ -1475,7 +1475,7 @@ murrine_style_draw_slider (DRAW_ARGS, GtkOrientation orientation)
 
 	if (DETAIL ("hscale") || DETAIL ("vscale"))
 	{
-		murrine_style_draw_box (style, cr, state_type, shadow_type,
+		murrine_engine_draw_box (style, cr, state_type, shadow_type,
 		                        widget, detail, x, y, width, height);
 	}
 	else if (DETAIL ("slider"))
@@ -1524,12 +1524,12 @@ murrine_style_draw_slider (DRAW_ARGS, GtkOrientation orientation)
 		STYLE_FUNCTION(draw_scrollbar_slider) (cr, colors, &params, &scrollbar, x, y, width, height);
 	}
 	else
-		GTK_STYLE_CLASS (murrine_style_parent_class)->draw_slider (style, cr, state_type, shadow_type,
+		GTK_STYLE_CLASS (murrine_engine_parent_class)->draw_slider (style, cr, state_type, shadow_type,
 		                                                           widget, detail, x, y, width, height, orientation);
 }
 
 static void
-murrine_style_draw_option (DRAW_ARGS)
+murrine_engine_draw_option (DRAW_ARGS)
 {
 	MurrineStyle *murrine_style = MURRINE_STYLE (style);
 	MurrineColors *colors = &murrine_style->colors;
@@ -1565,7 +1565,7 @@ murrine_style_draw_option (DRAW_ARGS)
 }
 
 static void
-murrine_style_draw_check (DRAW_ARGS)
+murrine_engine_draw_check (DRAW_ARGS)
 {
 	MurrineStyle *murrine_style = MURRINE_STYLE (style);
 	MurrineColors *colors = &murrine_style->colors;
@@ -1600,7 +1600,7 @@ murrine_style_draw_check (DRAW_ARGS)
 }
 
 static void
-murrine_style_draw_tab (DRAW_ARGS)
+murrine_engine_draw_tab (DRAW_ARGS)
 {
 	MurrineStyle *murrine_style = MURRINE_STYLE (style);
 	MurrineColors *colors = &murrine_style->colors;
@@ -1620,7 +1620,7 @@ murrine_style_draw_tab (DRAW_ARGS)
 }
 
 static void
-murrine_style_draw_vline (GtkStyle     *style,
+murrine_engine_draw_vline (GtkStyle     *style,
                           cairo_t      *cr,
                           GtkStateType  state_type,
                           GtkWidget    *widget,
@@ -1660,7 +1660,7 @@ murrine_style_draw_vline (GtkStyle     *style,
 }
 
 static void
-murrine_style_draw_hline (GtkStyle     *style,
+murrine_engine_draw_hline (GtkStyle     *style,
                           cairo_t      *cr,
                           GtkStateType  state_type,
                           GtkWidget    *widget,
@@ -1694,7 +1694,7 @@ murrine_style_draw_hline (GtkStyle     *style,
 }
 
 static void
-murrine_style_draw_shadow_gap (DRAW_ARGS,
+murrine_engine_draw_shadow_gap (DRAW_ARGS,
                                GtkPositionType gap_side,
                                gint            gap_x,
                                gint            gap_width)
@@ -1724,14 +1724,14 @@ murrine_style_draw_shadow_gap (DRAW_ARGS,
 	}
 	else
 	{
-		GTK_STYLE_CLASS (murrine_style_parent_class)->draw_shadow_gap (style, cr, state_type, shadow_type,
+		GTK_STYLE_CLASS (murrine_engine_parent_class)->draw_shadow_gap (style, cr, state_type, shadow_type,
 		                                                               widget, detail, x, y, width, height,
 		                                                               gap_side, gap_x, gap_width);
 	}
 }
 
 static void
-murrine_style_draw_resize_grip (GtkStyle      *style,
+murrine_engine_draw_resize_grip (GtkStyle      *style,
                                 cairo_t       *cr,
                                 GtkStateType  state_type,
                                 GtkWidget     *widget,
@@ -1764,7 +1764,7 @@ murrine_style_draw_resize_grip (GtkStyle      *style,
 }
 
 static void
-murrine_style_draw_arrow (GtkStyle     *style,
+murrine_engine_draw_arrow (GtkStyle     *style,
                           cairo_t      *cr,
                           GtkStateType  state_type,
                           GtkShadowType shadow,
@@ -1903,7 +1903,7 @@ murrine_style_draw_arrow (GtkStyle     *style,
 }
 
 static void
-murrine_style_draw_layout (GtkStyle     *style,
+murrine_engine_draw_layout (GtkStyle     *style,
                            cairo_t      *cr,
                            GtkStateType state_type,
                            gboolean     use_text,
@@ -2033,7 +2033,7 @@ murrine_style_draw_layout (GtkStyle     *style,
 }
 
 static void
-murrine_style_draw_expander (GtkStyle        *style,
+murrine_engine_draw_expander (GtkStyle        *style,
                              cairo_t         *cr,
                              GtkStateType     state_type,
                              GtkWidget       *widget,
@@ -2066,7 +2066,7 @@ murrine_style_draw_expander (GtkStyle        *style,
 }
 
 static void
-murrine_style_draw_focus (GtkStyle *style, cairo_t *cr, GtkStateType state_type,
+murrine_engine_draw_focus (GtkStyle *style, cairo_t *cr, GtkStateType state_type,
                           GtkWidget *widget, const gchar *detail,
                           gint x, gint y, gint width, gint height)
 {
@@ -2240,12 +2240,12 @@ murrine_style_draw_focus (GtkStyle *style, cairo_t *cr, GtkStateType state_type,
 }
 
 static void
-murrine_style_init_from_rc (GtkStyle   *style,
+murrine_engine_init_from_rc (GtkStyle   *style,
                             GtkRcStyle *rc_style)
 {
 	MurrineStyle *murrine_style = MURRINE_STYLE (style);
 
-	GTK_STYLE_CLASS (murrine_style_parent_class)->init_from_rc (style, rc_style);
+	GTK_STYLE_CLASS (murrine_engine_parent_class)->init_from_rc (style, rc_style);
 
 	/* Shades/Colors/Ratio */
 	murrine_style->border_shades[0]   = MURRINE_RC_STYLE (rc_style)->border_shades[0];
@@ -2338,7 +2338,7 @@ murrine_style_init_from_rc (GtkStyle   *style,
 }
 
 static void
-murrine_style_realize (GtkStyle *style)
+murrine_engine_realize (GtkStyle *style)
 {
 	MurrineStyle *murrine_style = MURRINE_STYLE (style);
 	double shades[] = {1.065, 0.95, 0.896, 0.82, 0.75, 0.665, 0.5, 0.45, 0.4};
@@ -2348,7 +2348,7 @@ murrine_style_realize (GtkStyle *style)
 	double contrast;
 	int i;
 
-	GTK_STYLE_CLASS (murrine_style_parent_class)->realize (style);
+	GTK_STYLE_CLASS (murrine_engine_parent_class)->realize (style);
 
 	contrast = MURRINE_RC_STYLE (style->rc_style)->contrast;
 
@@ -2394,7 +2394,7 @@ gdk_cairo_set_source_color_alpha (cairo_t  *cr,
 }
 
 static void
-murrine_style_copy (GtkStyle *style, GtkStyle *src)
+murrine_engine_copy (GtkStyle *style, GtkStyle *src)
 {
 	MurrineStyle *mrn_style = MURRINE_STYLE (style);
 	MurrineStyle *mrn_src = MURRINE_STYLE (src);
@@ -2459,13 +2459,13 @@ murrine_style_copy (GtkStyle *style, GtkStyle *src)
 	mrn_style->trough_shades[0]    = mrn_src->trough_shades[0];
 	mrn_style->trough_shades[1]    = mrn_src->trough_shades[1];
 
-	GTK_STYLE_CLASS (murrine_style_parent_class)->copy (style, src);
+	GTK_STYLE_CLASS (murrine_engine_parent_class)->copy (style, src);
 }
 
 static void
-murrine_style_unrealize (GtkStyle *style)
+murrine_engine_unrealize (GtkStyle *style)
 {
-	GTK_STYLE_CLASS (murrine_style_parent_class)->unrealize (style);
+	GTK_STYLE_CLASS (murrine_engine_parent_class)->unrealize (style);
 }
 
 static GdkPixbuf *
@@ -2521,7 +2521,7 @@ scale_or_ref (GdkPixbuf *src,
 }
 
 static GdkPixbuf *
-murrine_style_draw_render_icon (GtkStyle            *style,
+murrine_engine_draw_render_icon (GtkStyle            *style,
                                 const GtkIconSource *source,
                                 GtkTextDirection    direction,
                                 GtkStateType        state,
@@ -2560,7 +2560,7 @@ murrine_style_draw_render_icon (GtkStyle            *style,
 	{
 		settings = gtk_settings_get_default ();
 		GTK_NOTE (MULTIHEAD,
-		g_warning ("Using the default screen for gtk_default_murrine_style_draw_render_icon()"));
+		g_warning ("Using the default screen for murrine_engine_draw_render_icon()"));
 	}
 
 	if (size != (GtkIconSize) -1 && !gtk_icon_size_lookup_for_settings (settings, size, &width, &height))
@@ -2624,7 +2624,7 @@ murrine_engine_register_types (GTypeModule *module)
 
 
 static void
-murrine_style_init (MurrineStyle *style)
+murrine_engine_init (MurrineStyle *style)
 {
 }
 
@@ -2633,29 +2633,29 @@ murrine_engine_class_init (MurrineEngineClass *klass)
 {
 	GtkStyleClass *style_class = GTK_STYLE_CLASS (klass);
 
-	style_class->copy             = murrine_style_copy;
-	style_class->realize          = murrine_style_realize;
-	style_class->unrealize        = murrine_style_unrealize;
-	style_class->init_from_rc     = murrine_style_init_from_rc;
-	style_class->draw_arrow       = murrine_style_draw_arrow;
-	style_class->draw_layout      = murrine_style_draw_layout;
-	style_class->draw_box         = murrine_style_draw_box;
-	style_class->draw_box_gap     = murrine_style_draw_box_gap;
-	style_class->draw_check       = murrine_style_draw_check;
-	style_class->draw_expander    = murrine_style_draw_expander;
-	style_class->draw_extension   = murrine_style_draw_extension;
-	style_class->draw_flat_box    = murrine_style_draw_flat_box;
-	style_class->draw_focus       = murrine_style_draw_focus;
-	style_class->draw_handle      = murrine_style_draw_handle;
-	style_class->draw_hline       = murrine_style_draw_hline;
-	style_class->draw_option      = murrine_style_draw_option;
-	style_class->render_icon      = murrine_style_draw_render_icon;
-	style_class->draw_resize_grip = murrine_style_draw_resize_grip;
-	style_class->draw_shadow      = murrine_style_draw_shadow;
-	style_class->draw_shadow_gap  = murrine_style_draw_shadow_gap;
-	style_class->draw_slider      = murrine_style_draw_slider;
-	style_class->draw_tab         = murrine_style_draw_tab;
-	style_class->draw_vline       = murrine_style_draw_vline;
+	style_class->copy             = murrine_engine_copy;
+	style_class->realize          = murrine_engine_realize;
+	style_class->unrealize        = murrine_engine_unrealize;
+	style_class->init_from_rc     = murrine_engine_init_from_rc;
+	style_class->draw_arrow       = murrine_engine_draw_arrow;
+	style_class->draw_layout      = murrine_engine_draw_layout;
+	style_class->draw_box         = murrine_engine_draw_box;
+	style_class->draw_box_gap     = murrine_engine_draw_box_gap;
+	style_class->draw_check       = murrine_engine_draw_check;
+	style_class->draw_expander    = murrine_engine_draw_expander;
+	style_class->draw_extension   = murrine_engine_draw_extension;
+	style_class->draw_flat_box    = murrine_engine_draw_flat_box;
+	style_class->draw_focus       = murrine_engine_draw_focus;
+	style_class->draw_handle      = murrine_engine_draw_handle;
+	style_class->draw_hline       = murrine_engine_draw_hline;
+	style_class->draw_option      = murrine_engine_draw_option;
+	style_class->render_icon      = murrine_engine_draw_render_icon;
+	style_class->draw_resize_grip = murrine_engine_draw_resize_grip;
+	style_class->draw_shadow      = murrine_engine_draw_shadow;
+	style_class->draw_shadow_gap  = murrine_engine_draw_shadow_gap;
+	style_class->draw_slider      = murrine_engine_draw_slider;
+	style_class->draw_tab         = murrine_engine_draw_tab;
+	style_class->draw_vline       = murrine_engine_draw_vline;
 
 	murrine_register_style_murrine (&klass->style_functions[MRN_STYLE_MURRINE]);
 	klass->style_functions[MRN_STYLE_RGBA] = klass->style_functions[MRN_STYLE_MURRINE];
