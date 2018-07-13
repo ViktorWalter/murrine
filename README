@@ -1,3 +1,6 @@
+This fork of the Murrine engine fixes the errors that arise when using bitmap fonts.
+The alteration is based on https://bugs.freedesktop.org/show_bug.cgi?id=78787#c9. 
+
 This is Murrine GTK+ engine. This source code provides only the engine, get the themes @ gnomelook.org.
 
 Do the normal dance to install:
